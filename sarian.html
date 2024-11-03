@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OMG</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Orbitron', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.4);
+    }
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 600px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease-out;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-header .close {
+      cursor: pointer;
+      font-size: 28px;
+    }
+    .spinner {
+      display: none;
+      text-align: center;
+    }
+    .nav-buttons {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    .arrow-btn, .go-btn, .show-modal-btn {
+      background-color: #f0f0f0;
+      color: #333;
+      padding: 10px 15px;
+      border: none;
+      cursor: pointer;
+      outline: none;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .arrow-btn:hover, .go-btn:hover, .show-modal-btn:hover {
+      background-color: #49ed00; /* Brighter green for better visibility */
+      color: #000; /* Contrast color for readability */
+    }
+  </style>
+</head>
+<body>
+  <div class="modal" id="myModal" role="dialog" aria-labelledby="modalTitle" aria-modal="true">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span id="modalTitle">Explore Dimensions</span>
+        <span class="close" onclick="closeModal()">×</span>
+      </div>
+      <div class="spinner" id="spinner">Loading...</div>
+      <iframe id="modalIframe" src="" title="Dynamic Content Frame" style="width: 100%; height: 300px;" loading="lazy"></iframe>
+      <div class="nav-buttons">
+        <button class="arrow-btn" onclick="navigate(-1)" aria-label="Previous link"><i class="fas fa-arrow-left"></i></button>
+        <button class="go-btn" onclick="goToSite()" aria-label="Open link in new tab">Go <i class="fas fa-door-open"></i></button>
+        <button class="arrow-btn" onclick="navigate(1)" aria-label="Next link"><i class="fas fa-arrow-right"></i></button>
+      </div>
+    </div>
+  </div>
+  <div class="fallback" id="fallback">
+    <p>The journey awaits. Click below to explore the next destination!</p>
+    <button class="show-modal-btn" onclick="reopenModal()" aria-label="Reopen modal"><i class="fas fa-eye"></i> Enter Portal</button>
+  </div>
+
+  <script>
+    let links = [
+      'https://www.profitablecpmrate.com/mh2gus2ir?key=815311eb6032abacf8eb2bee2247ce5d',
+      'https://www.profitablecpmrate.com/n3a4mbwqv?key=4b23dfc27f908fb5aa3fb1c61634d099',
+      'https://www.profitablecpmrate.com/ty8ss91p?key=cb04317ae529e82d35d7d83b203f3b59',
+      'https://www.profitablecpmrate.com/z2n5mgh7rv?key=18ae96380e83572c3eeeb85b49d1d2e1'
+    ];
+    let currentIndex = 0;
+    let autoNavigateInterval;
+
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    function refreshPage(interval = 250000) {
+      setInterval(() => {
+        location.reload();
+      }, interval);
+    }
+
+    function showLink(index) {
+      const iframe = document.getElementById('modalIframe');
+      const modal = document.getElementById('myModal');
+      const spinner = document.getElementById('spinner');
+      iframe.src = links[index];
+      modal.style.display = 'flex';
+      spinner.style.display = 'block';
+      iframe.onload = () => {
+        spinner.style.display = 'none';
+      };
+      clearInterval(autoNavigateInterval);
+      autoNavigateInterval = setInterval(() => {
+        navigate(1);
+      }, Math.floor(Math.random() * (40000 - 30000 + 1) + 30000));
+    }
+
+    function navigate(direction) {
+      currentIndex = (currentIndex + direction + links.length) % links.length;
+      showLink(currentIndex);
+    }
+
+    function goToSite() {
+      window.open(links[currentIndex], '_blank');
+    }
+
+    function closeModal() {
+      document.getElementById('myModal').style.display = 'none';
+      document.getElementById('modalIframe').src = '';
+      clearInterval(autoNavigateInterval);
+    }
+
+    function reopenModal() {
+      showLink(currentIndex);
+    }
+
+    window.onload = function () {
+      shuffleArray(links);
+      refreshPage();
+      showLink(currentIndex);
+    };
+  </script>
+</body>
+</html>
